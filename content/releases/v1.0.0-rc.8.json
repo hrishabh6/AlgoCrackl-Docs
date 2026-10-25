@@ -1,0 +1,113 @@
+{
+  "version": "v1.0.0-rc.8",
+  "verifiedOn": "2026-10-25",
+  "deployment": {
+    "kind": "local-kubernetes",
+    "summary": "Published linux/amd64 images for the local Minikube deployment. This is a personal production-style cluster, not a public multi-tenant service."
+  },
+  "execution": {
+    "submission": "PERSISTENT_NSJAIL",
+    "playground": "PERSISTENT_NSJAIL",
+    "executedLanguages": ["JAVA"],
+    "savedSnippetLanguages": ["JAVA", "PYTHON"],
+    "retainedFallbacks": ["KUBERNETES_JOB", "local-process"]
+  },
+  "limitations": [
+    "Playground execution accepts Java only. Python snippets can still be saved.",
+    "Playground compilation output may include the JVM JAVA_TOOL_OPTIONS banner.",
+    "Kubernetes Job and local-process execution remain in source as fallback paths. They are not the RC.8 route for submissions or Java Playground.",
+    "Static and dynamic complexity analysis are not an RC.8 user-facing feature.",
+    "The submission Language enum also names C++ and JavaScript. Those are not a verified RC.8 execution path.",
+    "No public traffic, user count, or multi-node production claim belongs to this release."
+  ],
+  "images": [
+    {
+      "component": "api-gateway",
+      "image": "hrishabhjoshi/api-gateway:v1.0.0-rc.8",
+      "gitRepository": "AlgoCrack-APIGateway",
+      "gitSha": "e61d5fd86b116119e59c0536cdc88953d3510cc7",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:d5f191b6c99a7d40cff6584eabb7744f0ef32a1fb7d5d343836f27f86c403538",
+      "status": "VERIFIED",
+      "dockerfile": "AlgoCrack-APIGateway/Dockerfile",
+      "artifactRole": "gateway"
+    },
+    {
+      "component": "auth-service",
+      "image": "hrishabhjoshi/auth-service:v1.0.0-rc.8",
+      "gitRepository": "AlgoCrack-AuthService",
+      "gitSha": "ba9f759dec60307b3ebb376644df3282940401b2",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:f12af504e7346844e7168087c597d63c11455c3e09dbcedd9b9a728d072baabb",
+      "status": "VERIFIED",
+      "dockerfile": "AlgoCrack-AuthService/Dockerfile",
+      "artifactRole": "auth"
+    },
+    {
+      "component": "problem-service",
+      "image": "hrishabhjoshi/problem-service:v1.0.0-rc.8",
+      "gitRepository": "AlgoCrack-ProblemService",
+      "gitSha": "0bd8c3e0bb6850d4635db4bbea8bdf15bbc980d3",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:7e051448c4d679a505d9fa504b6a0498bb74fad70ad00e24d7335b721aeb81da",
+      "status": "VERIFIED",
+      "dockerfile": "AlgoCrack-ProblemService/Dockerfile",
+      "artifactRole": "problem"
+    },
+    {
+      "component": "submission-service",
+      "image": "hrishabhjoshi/submission-service:v1.0.0-rc.8",
+      "gitRepository": "AlgoCrack-SubmissionService",
+      "gitSha": "fddf3d52b709b2bacc476898893e651dfadf0fba",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:cfdbefbec1aaa3c917e9766354914c43241ddcc72c02cb03cbaaec64ba9190ee",
+      "status": "VERIFIED",
+      "dockerfile": "AlgoCrack-SubmissionService/Dockerfile",
+      "artifactRole": "submission"
+    },
+    {
+      "component": "code-execution-engine",
+      "image": "hrishabhjoshi/code-execution-engine:v1.0.0-rc.8",
+      "gitRepository": "CodeExecutionEngine",
+      "gitSha": "c8e9c069e384d56a5ba3a01e370188db88ec05ba",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:8e98d38c36c35dd9f0a528ea33c10cf68f0884027f59c2c46e01f16edd5f2851",
+      "status": "VERIFIED",
+      "dockerfile": "CodeExecutionEngine/Dockerfile",
+      "artifactRole": "cxe-orchestrator"
+    },
+    {
+      "component": "cxe-nsjail-runner",
+      "image": "hrishabhjoshi/cxe-nsjail-runner:v1.0.0-rc.8",
+      "gitRepository": "CodeExecutionEngine",
+      "gitSha": "c8e9c069e384d56a5ba3a01e370188db88ec05ba",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:fe8097d907a675043029e1ab7e5fe4a626a6207f491052bf195803842037ae23",
+      "status": "VERIFIED",
+      "dockerfile": "CodeExecutionEngine/Dockerfile.runner.packaged",
+      "artifactRole": "cxe-persistent-runner"
+    },
+    {
+      "component": "frontend",
+      "image": "hrishabhjoshi/frontend:v1.0.0-rc.8",
+      "gitRepository": "frontend",
+      "gitSha": "c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:ac1a220c22d693de1b5f900f3bd35b05e7c19ac00585955972673d72f9ec6305",
+      "status": "VERIFIED",
+      "dockerfile": "frontend/Dockerfile",
+      "artifactRole": "frontend"
+    },
+    {
+      "component": "waf",
+      "image": "hrishabhjoshi/waf:v1.0.0-rc.8",
+      "gitRepository": "docker",
+      "gitSha": "a53641c5bde32fe75e238a2ef598da28da95ba8b",
+      "platform": "linux/amd64",
+      "manifestDigest": "sha256:142dbc6db2af4ca64d60cec1234f3b280526988d953c47454a58d7135b015c0c",
+      "status": "VERIFIED",
+      "dockerfile": "docker/waf/Dockerfile",
+      "artifactRole": "waf"
+    }
+  ]
+}
