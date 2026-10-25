@@ -2,7 +2,7 @@
 title: Global architecture
 description: A newcomer-friendly system overview and the RC.8 HTTP, data, and sandbox boundaries.
 audience: [developer, operator]
-status: verified
+status: partial
 release: v1.0.0-rc.8
 lastVerified: 2026-10-25
 sourceRefs:
@@ -17,7 +17,19 @@ sourceRefs:
     path: nsjail-runner/src/main/java/xyz/hrishabhjoshi/codeexecutionengine/runner/PersistentRunnerMain.java
 ---
 
-RC.8 keeps the product API and untrusted code execution apart. The browser uses HTTP services for product actions; a separate plain-Java runner consumes execution work and creates fresh NsJail processes for compilation and execution.
+RC.8 source evidence keeps the product API and untrusted code execution apart. The browser uses HTTP services for product actions; a separate plain-Java runner consumes execution work and creates fresh NsJail processes for compilation and execution. The focused pages below carry the deployment-evidence qualification: the checked-in record does not include a revision-19 manifest/values capture.
+
+## Start with the architecture learning path
+
+This page is a short orientation retained from D2. For the source-backed engineering path, read the focused pages in this order:
+
+1. [System context](/docs/architecture/system-context)
+2. [Container architecture](/docs/architecture/container-architecture)
+3. [Request routing and authentication](/docs/architecture/request-routing-and-authentication)
+4. [Data ownership and persistence](/docs/architecture/data-ownership-and-persistence)
+5. [Execution coordination and trust boundaries](/docs/architecture/execution-coordination-and-trust-boundaries)
+6. [Observability architecture](/docs/architecture/observability-architecture)
+7. Service deep dives — planned D3.4 work
 
 ## System overview
 

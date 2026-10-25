@@ -1,4 +1,13 @@
 {
   "title": "Architecture",
-  "pages": ["overview", "repositories"]
+  "pages": [
+    "system-context",
+    "container-architecture",
+    "request-routing-and-authentication",
+    "data-ownership-and-persistence",
+    "execution-coordination-and-trust-boundaries",
+    "observability-architecture",
+    "overview",
+    "repositories"
+  ]
 }
