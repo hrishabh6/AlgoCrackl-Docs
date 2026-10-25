@@ -21,6 +21,10 @@ sourceRefs:
 
 Image identity is the tag plus the manifest digest below. A rebuild of the same Git commit produces a different digest, so this page does not treat a commit SHA as a substitute for the published digest.
 
+## Deployment-evidence note
+
+The project owner reported a successful Helm revision **19** deployment on 2026-10-25. That report is distinct from the published RC.8 image manifest: `images.tsv` verifies the source/image mapping, while a checked-in revision-19 values/manifest export and workload image-ID capture are still absent from the documentation evidence set. The source pins on this page therefore remain RC.8 release pins, and deployment-sensitive architecture pages remain source-qualified rather than being silently promoted to **Verified deployed**.
+
 ## Execution contract
 
 | Mode | RC.8 route |
@@ -47,6 +51,18 @@ The table shortens digests for reading. The checked-in record at `content/releas
 - Do not read this page as a capacity, traffic, or uptime statement.
 
 ## Sources
+
+<SourceReference
+  repository="cxe"
+  path="Dockerfile.runner.packaged"
+  label="Runner image source at the RC.8 revision"
+/>
+
+<SourceReference
+  repository="submission"
+  path="src/main/java/com/hrishabh/algocracksubmissionservice/playground/service/PlaygroundRunService.java"
+  label="Playground release-behavior source"
+/>
 
 - `release-manifests/v1.0.0-rc.8/images.tsv`
 - `CodeExecutionEngine` `c8e9c069e384d56a5ba3a01e370188db88ec05ba`
