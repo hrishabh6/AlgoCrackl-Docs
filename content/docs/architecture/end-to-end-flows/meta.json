@@ -1,0 +1,11 @@
+{
+  "title": "End-to-End Flows",
+  "pages": [
+    "authentication-and-session-establishment",
+    "problem-retrieval-and-discovery",
+    "java-run",
+    "official-java-submit-and-oracle",
+    "playground-java-execution",
+    "playground-snippet-persistence"
+  ]
+}
