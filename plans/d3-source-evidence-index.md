@@ -46,6 +46,10 @@ The checked-in image manifest contains eight `VERIFIED` `linux/amd64` image rows
 | A runner reads Redis v2 work and launches a fresh NsJail compile/run process | `CodeExecutionEngine/nsjail-runner/**`, `Dockerfile.runner.packaged` at `c8e9c06` | runner/atomic-move/Playground test entries in the RC.8 gate record | Implemented but not deployment-qualified |
 | The legacy queue/Job and local-process paths remain | CXE routing/application sources at `c8e9c06` | RC.8 known-limitation record | Legacy/fallback |
 | Prometheus scrapes actuator metrics; Alloy forwards Kubernetes logs to Loki; Grafana is provisioned with both sources | `helm/algocrack/templates/monitoring.yaml` at `f32b8db` | `docs/observability/**` | Implemented but not deployment-qualified |
+| Password sign-in, browser token attachment, and OAuth callback handling | Frontend sign-in/callback/API-client sources at `c859bc6`; Auth controller/security/success-handler sources at `ba9f759`; Gateway route configuration at `e61d5fd` | Helm ingress/WAF topology at `f32b8db` | Implemented but not deployment-qualified |
+| Catalogue list filters and summary projection | Frontend `src/lib/api/problem-service.ts` at `c859bc6`; Problem `ProblemsController`/`QuestionService` at `0bd8c3e` | Gateway public/protected groups and Submission statistics client | Implemented but not deployment-qualified |
+| Run and official Submit user/oracle workflow | Frontend `problem-actions.tsx`; Submission `UnifiedExecutionService`, `SubmissionService`, `SubmissionProcessingService`, and `OracleExecutionService` at `fddf3d5` | CXE submit/status/results and runner sources at `c8e9c06` | Implemented but not deployment-qualified |
+| Playground run and saved snippets | Frontend Playground client/workspace sources at `c859bc6`; Submission Playground controller/services at `fddf3d5`; CXE router/publisher/runner at `c8e9c06` | RC.8 gate record names Playground runner checks | Implemented but not deployment-qualified |
 
 ## Release-record reconciliation
 
