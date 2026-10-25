@@ -1,6 +1,6 @@
 ---
 title: Global architecture
-description: How a browser request reaches MySQL, Redis, and an NsJail process in RC.8.
+description: A newcomer-friendly system overview and the RC.8 HTTP, data, and sandbox boundaries.
 audience: [developer, operator]
 status: verified
 release: v1.0.0-rc.8
@@ -8,55 +8,93 @@ lastVerified: 2026-10-25
 sourceRefs:
   - repo: helm
     ref: f32b8db734b111e3e3c1acce636e90f068dcd0d9
-    path: algocrack/values.yaml
+    path: algocrack/templates/ingress.yaml
   - repo: helm
     ref: f32b8db734b111e3e3c1acce636e90f068dcd0d9
-    path: algocrack/templates/ingress.yaml
+    path: algocrack/templates/cxe-nsjail-runner.yaml
   - repo: CodeExecutionEngine
     ref: c8e9c069e384d56a5ba3a01e370188db88ec05ba
-    path: Dockerfile.runner.packaged
+    path: nsjail-runner/src/main/java/xyz/hrishabhjoshi/codeexecutionengine/runner/PersistentRunnerMain.java
 ---
 
-RC.8 keeps the product API and the untrusted process apart. Spring Boot services own HTTP, identity, and rows in MySQL. A plain Java runner, with no public HTTP port and no Kubernetes API access, starts NsJail for compile and run.
+RC.8 keeps the product API and untrusted code execution apart. The browser uses HTTP services for product actions; a separate plain-Java runner consumes execution work and creates fresh NsJail processes for compilation and execution.
+
+## System overview
+
+Use this diagram first: it shows the major responsibilities without treating every implementation detail as an architectural boundary.
 
 ```mermaid
 flowchart LR
-  Browser[Browser] --> Ingress[Ingress]
-  Ingress -->|/| Frontend[Next.js frontend]
-  Ingress -->|/api| WAF[NGINX and ModSecurity]
+  Browser[Browser] --> Edge[Ingress]
+  Edge -->|pages| Frontend[Next.js frontend]
+  Edge -->|API requests| WAF[WAF]
   WAF --> Gateway[API Gateway]
-  Gateway --> Auth[Auth Service]
-  Gateway --> Problem[Problem Service]
-  Gateway --> Submission[Submission Service]
-  Submission --> CXE[CXE orchestrator]
-  CXE --> Redis[(Redis v2)]
+  Gateway --> Domain[Auth, Problem, and Submission services]
+  Domain --> MySQL[(MySQL)]
+  Domain --> CXE[Code Execution Engine]
+  CXE --> Redis[(Redis task and status data)]
   Redis --> Runner[Persistent NsJail runner]
-  Runner --> Jail[NsJail compile and run]
-  Auth --> MySQL[(MySQL)]
-  Problem --> MySQL
-  Submission --> MySQL
+  Runner --> Jail[NsJail compile or run process]
 ```
 
-## Request path
+The [Getting started](/docs/using/getting-started) and [Run versus Submit](/docs/using/run-and-submit) guides explain what this means for a user. The planned engineering reference will expand each boundary without turning this orientation page into a component diagram.
 
-1. Ingress sends `/` to the frontend and `/api` to the WAF. The API gateway is not the ingress backend for `/api`.
-2. The gateway checks the JWT and sets identity headers from that token. It does not trust a caller-supplied user id.
-3. Auth Service owns accounts and token signing. Problem Service owns the catalogue, lists, profiles, and the daily schedule. Submission Service owns submission rows, judging, progress, and the Playground API.
-4. Each of those three services uses its own MySQL schema. Redis is the execution queue and status store, not the system of record for users or submissions.
-5. For a Java submission or Java Playground run, the Code Execution Engine orchestrator publishes a versioned task. The runner claims it, then starts a fresh NsJail process for compilation and another for execution.
+## RC.8 container-level HLD
 
-Official Submit still does two executions: the user solution and a reference solution. Playground does not. It has no question and no oracle.
+The fuller view separates inbound HTTP, application persistence, and the execution path. Arrows indicate known request or work direction, not a claim that every service communicates with every other service.
 
-## What the diagram does not include
+```mermaid
+flowchart LR
+  classDef edge fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+  classDef service fill:#ede9fe,stroke:#7c3aed,color:#3b0764
+  classDef data fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef execution fill:#ffedd5,stroke:#ea580c,color:#7c2d12
 
-The Kubernetes Job path and the local-process path are still compiled into the execution engine. They are fallbacks. They are not boxes on the RC.8 request path above.
+  subgraph HTTP[HTTP and identity boundary]
+    Browser[Browser]:::edge --> Ingress[Ingress]:::edge
+    Ingress -->|/| Frontend[Next.js frontend]:::service
+    Ingress -->|/api/*| WAF[NGINX, ModSecurity, CRS]:::edge
+    WAF --> Gateway[API Gateway]:::service
+    Gateway --> Auth[Auth Service]:::service
+    Gateway --> Problem[Problem Service]:::service
+    Gateway --> Submission[Submission Service]:::service
+  end
 
-Complexity profiling is also omitted. It is not part of the user-facing RC.8 route.
+  subgraph Data[Application persistence]
+    Auth --> AuthDB[(auth_db)]:::data
+    Problem --> ProblemDB[(problem_db)]:::data
+    Submission --> SubmissionDB[(submission_db)]:::data
+  end
 
-The runner and the orchestrator are two images built from the same `CodeExecutionEngine` commit and different Dockerfiles. Only the orchestrator is a Spring Boot application.
+  subgraph Execution[Redis and isolated execution]
+    Submission --> CXE[CXE orchestrator]:::execution
+    CXE --> Redis[(Redis v2 task and status state)]:::data
+    Redis --> Runner[Persistent Java runner]:::execution
+    Runner --> Compile[NsJail compilation process]:::execution
+    Runner --> Run[NsJail program process]:::execution
+  end
+```
+
+### What this diagram establishes
+
+1. `/` is a frontend route, while `/api/*` goes through the WAF before the internal gateway.
+2. Auth, Problem, and Submission Service own separate MySQL schemas. Redis coordinates execution work and status; it is not the canonical store for user or submission records.
+3. The runner has no public HTTP listener. It receives versioned execution work from Redis and starts a new NsJail process for each compile and run stage.
+4. An official Submit requires two execution lifecycles: the user solution followed by the trusted reference solution. A Playground run has no problem or oracle.
+
+## Boundaries that need deeper reading
+
+- [Platform features and Java support](/docs/using/features) distinguishes shipped Java paths from saved or retained language options.
+- [Run versus Submit](/docs/using/run-and-submit) gives the user-facing result and error lifecycle.
+- [Documentation diagram standards](/docs/developer/diagram-standards) explains why later diagrams are split by reader question and not overloaded.
+- [Repository map](/docs/architecture/repositories) identifies the repository that owns each part of this picture.
+
+## Retained paths and scope
+
+The Kubernetes Job executor and a trusted local-process executor remain in the Code Execution Engine as compatibility and rollback paths. They are not boxes on the RC.8 Java request path shown above. Complexity analysis is likewise out of scope for this user and architecture overview.
 
 ## Sources
 
-- `helm` `f32b8db734b111e3e3c1acce636e90f068dcd0d9`, `algocrack/values.yaml` and `algocrack/templates/ingress.yaml`
-- `CodeExecutionEngine` `c8e9c069e384d56a5ba3a01e370188db88ec05ba`, `Dockerfile` and `Dockerfile.runner.packaged`
-- `AlgoCrack-APIGateway` `e61d5fd86b116119e59c0536cdc88953d3510cc7`, gateway route configuration
+- `helm` `f32b8db734b111e3e3c1acce636e90f068dcd0d9`, `algocrack/templates/ingress.yaml`, `algocrack/templates/code-execution-engine.yaml`, and `algocrack/templates/cxe-nsjail-runner.yaml`
+- `CodeExecutionEngine` `c8e9c069e384d56a5ba3a01e370188db88ec05ba`, `Dockerfile`, `Dockerfile.runner.packaged`, and `nsjail-runner/**`
+- `AlgoCrack-APIGateway` `e61d5fd86b116119e59c0536cdc88953d3510cc7`, `src/main/resources/application.yml`

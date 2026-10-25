@@ -1,0 +1,70 @@
+---
+title: Documentation diagram standards
+description: How AlgoCrack diagrams stay readable, evidence-based, and useful at different levels of detail.
+audience: [developer, maintainer]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: algocrack-docs
+    ref: docs/d2-user-guides
+    path: components/mdx/mermaid.tsx
+  - repo: algocrack-docs
+    ref: docs/d2-user-guides
+    path: content/docs/architecture/overview.mdx
+---
+
+Diagrams answer a specific reader question; they are not screenshots of every class, Pod, or Redis key. Mermaid source belongs in the MDX page that explains it, so reviewers can inspect a diagram change in the same diff as its claims.
+
+## Reader experience
+
+Every Mermaid diagram uses the shared renderer with `securityLevel: 'strict'`. It has a readable in-page view and an **Expand diagram** control. The expanded dialog supports keyboard close, visible close and reset controls, zoom in/out, and scrollable space for a large SVG. On a narrow screen, the in-page view scrolls horizontally instead of reducing labels until they are unreadable.
+
+Use the expanded view when labels or arrows would otherwise require browser zoom. Keep the default diagram small enough to communicate its main point before expansion.
+
+## Required context
+
+For each diagram, provide:
+
+1. A heading that says what the reader will learn.
+2. One short explanation before or after the diagram.
+3. Clear labels, arrow directions, and a legend only when color or shape has a meaning.
+4. A release/source qualification when the diagram represents a release-specific state.
+5. Links to the detailed page that owns the next level of explanation.
+
+Do not imply a relationship because it would make a diagram look complete. If evidence is incomplete, use a note or omit the edge.
+
+## Diagram selection
+
+| Need | Preferred diagram | What it should show |
+| --- | --- | --- |
+| Who uses the platform and which external systems matter | C4 system context | People, browser, platform, and external trust boundaries. |
+| How deployable services and stores fit together | C4 container/HLD | Services, communication type, data ownership, and main boundaries. |
+| How one service is organized | Component/LLD | Only components that explain a maintenance decision or extension point. |
+| What happens during a request or failure | Sequence diagram | Caller, ordered messages, reads/writes, asynchronous hand-offs, and error return. |
+| How data crosses a boundary | Data-flow diagram | Classification, storage, transformations, retention, and prohibited destinations. |
+| What runs where | Deployment topology | Ingress, workloads, stores, network/trust zones, and release-qualified infrastructure. |
+| What is trusted | Security/trust-boundary diagram | Identity, authorization, secret boundaries, untrusted code, and enforcement points. |
+| Which transitions are legal | State machine | State names, terminal states, ownership, retries, and timeout/cancellation transitions. |
+
+## Authoring rules
+
+- Prefer a simple orientation diagram plus a deeper diagram over one dense all-in-one graph.
+- Keep node labels as names or short responsibilities. Put implementation detail in adjacent prose.
+- Group boundaries with `subgraph` only when the grouping has a documented operational or trust meaning.
+- Use colors sparingly and do not depend on color alone to convey a state or boundary.
+- Preserve source order and stable identifiers where practical so diagram diffs are reviewable.
+- Do not embed credentials, user code, test payloads, raw Redis values, or private operational commands.
+- Test Mermaid rendering in both themes and use the fallback source block to diagnose syntax—not as a substitute for fixing a broken committed diagram.
+
+## Status vocabulary
+
+Use the page metadata and nearby prose consistently:
+
+- **Verified**: checked against a pinned RC.8 source/release artifact and, where stated, deployment evidence.
+- **Implemented but not deployed**: source exists but no release evidence confirms it is active.
+- **Legacy or fallback**: retained code that is not on the described RC.8 route.
+- **Planned**: an approved future design, never presented as current behavior.
+- **Historical**: a prior design or release; name its time/version.
+
+For additional page metadata and source-reference rules, see the [documentation conventions](/docs/developer/authoring).
