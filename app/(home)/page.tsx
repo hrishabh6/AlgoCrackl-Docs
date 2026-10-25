@@ -41,6 +41,11 @@ const entries = [
     title: 'RC.8 release',
     text: 'Verified image tags, source commits, and manifest digests.',
   },
+  {
+    href: '/developer',
+    title: 'Developer',
+    text: 'The engineer behind AlgoCrack and the project’s AI-assisted development approach.',
+  },
 ];
 
 export default function HomePage() {
