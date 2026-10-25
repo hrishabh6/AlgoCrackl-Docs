@@ -1,7 +1,7 @@
 # D3 source-evidence index
 
-Status: active evidence register for D3.1/D3.2.  
-Release scope: `v1.0.0-rc.8`.  
+Status: active evidence register for D3.1/D3.2.
+Release scope: `v1.0.0-rc.8`.
 Reviewed: 2026-10-25.
 
 This index is deliberately small: it records the release-qualified sources needed to review the global architecture pages. It is not an API inventory, a substitute for a live-cluster inspection, or a copy of application configuration.

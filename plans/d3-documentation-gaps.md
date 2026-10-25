@@ -1,6 +1,6 @@
 # D3 documentation gaps
 
-Status: open evidence register for D3.1/D3.2.  
+Status: open evidence register for D3.1/D3.2.
 Reviewed: 2026-10-25.
 
 These gaps prevent D3 from overstating source observations as live-cluster facts. They do not block the source-qualified global architecture pages in this batch.
