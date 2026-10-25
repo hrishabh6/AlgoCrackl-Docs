@@ -1,0 +1,62 @@
+---
+title: Global architecture
+description: How a browser request reaches MySQL, Redis, and an NsJail process in RC.8.
+audience: [developer, operator]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: helm
+    ref: f32b8db734b111e3e3c1acce636e90f068dcd0d9
+    path: algocrack/values.yaml
+  - repo: helm
+    ref: f32b8db734b111e3e3c1acce636e90f068dcd0d9
+    path: algocrack/templates/ingress.yaml
+  - repo: CodeExecutionEngine
+    ref: c8e9c069e384d56a5ba3a01e370188db88ec05ba
+    path: Dockerfile.runner.packaged
+---
+
+RC.8 keeps the product API and the untrusted process apart. Spring Boot services own HTTP, identity, and rows in MySQL. A plain Java runner, with no public HTTP port and no Kubernetes API access, starts NsJail for compile and run.
+
+```mermaid
+flowchart LR
+  Browser[Browser] --> Ingress[Ingress]
+  Ingress -->|/| Frontend[Next.js frontend]
+  Ingress -->|/api| WAF[NGINX and ModSecurity]
+  WAF --> Gateway[API Gateway]
+  Gateway --> Auth[Auth Service]
+  Gateway --> Problem[Problem Service]
+  Gateway --> Submission[Submission Service]
+  Submission --> CXE[CXE orchestrator]
+  CXE --> Redis[(Redis v2)]
+  Redis --> Runner[Persistent NsJail runner]
+  Runner --> Jail[NsJail compile and run]
+  Auth --> MySQL[(MySQL)]
+  Problem --> MySQL
+  Submission --> MySQL
+```
+
+## Request path
+
+1. Ingress sends `/` to the frontend and `/api` to the WAF. The API gateway is not the ingress backend for `/api`.
+2. The gateway checks the JWT and sets identity headers from that token. It does not trust a caller-supplied user id.
+3. Auth Service owns accounts and token signing. Problem Service owns the catalogue, lists, profiles, and the daily schedule. Submission Service owns submission rows, judging, progress, and the Playground API.
+4. Each of those three services uses its own MySQL schema. Redis is the execution queue and status store, not the system of record for users or submissions.
+5. For a Java submission or Java Playground run, the Code Execution Engine orchestrator publishes a versioned task. The runner claims it, then starts a fresh NsJail process for compilation and another for execution.
+
+Official Submit still does two executions: the user solution and a reference solution. Playground does not. It has no question and no oracle.
+
+## What the diagram does not include
+
+The Kubernetes Job path and the local-process path are still compiled into the execution engine. They are fallbacks. They are not boxes on the RC.8 request path above.
+
+Complexity profiling is also omitted. It is not part of the user-facing RC.8 route.
+
+The runner and the orchestrator are two images built from the same `CodeExecutionEngine` commit and different Dockerfiles. Only the orchestrator is a Spring Boot application.
+
+## Sources
+
+- `helm` `f32b8db734b111e3e3c1acce636e90f068dcd0d9`, `algocrack/values.yaml` and `algocrack/templates/ingress.yaml`
+- `CodeExecutionEngine` `c8e9c069e384d56a5ba3a01e370188db88ec05ba`, `Dockerfile` and `Dockerfile.runner.packaged`
+- `AlgoCrack-APIGateway` `e61d5fd86b116119e59c0536cdc88953d3510cc7`, gateway route configuration

@@ -1,0 +1,35 @@
+---
+title: Repository and microservice map
+description: Which independent Git repository owns each RC.8 service and image.
+audience: [developer, operator]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: release-manifests
+    ref: v1.0.0-rc.8
+    path: images.tsv
+---
+
+AlgoCrack is not one Git repository. The workspace holds independent repositories, and the documentation site is another one. RC.8 pins a commit in each repository that produces a published image.
+
+| Image | Repository | Commit | Role |
+| --- | --- | --- | --- |
+| `api-gateway` | `AlgoCrack-APIGateway` | `e61d5fd86b11` | JWT validation and route dispatch. |
+| `auth-service` | `AlgoCrack-AuthService` | `ba9f759dec60` | Accounts, Google OAuth, token signing. |
+| `problem-service` | `AlgoCrack-ProblemService` | `0bd8c3e0bb68` | Catalogue, lists, profiles, daily challenge. |
+| `submission-service` | `AlgoCrack-SubmissionService` | `fddf3d52b709` | Runs, submits, judging, progress, Playground API. |
+| `code-execution-engine` | `CodeExecutionEngine` | `c8e9c069e384` | HTTP orchestrator for execution. |
+| `cxe-nsjail-runner` | `CodeExecutionEngine` | `c8e9c069e384` | Long-lived runner. Same commit, `Dockerfile.runner.packaged`. |
+| `frontend` | `frontend` | `c859bc68bd6d` | Next.js product UI. |
+| `waf` | `docker` | `a53641c5bde3` | ModSecurity CRS edge in front of `/api`. |
+
+`helm` (`f32b8db734b1`) is the deployment contract: chart templates, ingress paths, and the runner. `k8s` is an older Kustomize base and is not the RC.8 release contract. `scripts` holds local development, image publish, and validation tooling. It does not ship as one of the eight images.
+
+`release-manifests` and the release notes under `context/releases` are workspace files, not their own Git repositories. The docs site copies the non-secret image rows into `content/releases/v1.0.0-rc.8.json` so a documentation build does not need Kubernetes or Docker Hub.
+
+MySQL and Redis are cluster dependencies, not AlgoCrack image builds. The chart runs them beside the services. Their data is not documentation.
+
+## Sources
+
+Full forty-character SHAs and registry digests are on the [RC.8 release](/docs/releases/v1.0.0-rc.8) page. They come from `release-manifests/v1.0.0-rc.8/images.tsv`.

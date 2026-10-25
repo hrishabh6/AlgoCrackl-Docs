@@ -1,0 +1,70 @@
+---
+title: Documentation conventions
+description: How to add a page without inventing behavior or publishing secrets.
+audience: [maintainer]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: algocrack-docs
+    ref: docs/d1-platform
+    path: lib/docs-schema.ts
+---
+
+Markdown and MDX in `content/docs` are the source of truth. Add a page only when you can point at a commit, a release manifest, or a file that shows the behavior. Do not add a navigation entry for a section that has no page yet.
+
+Later milestones will fill Using AlgoCrack, Execution & Security, API Reference, and Deployment & Operations. Those names are the planned map. They are not empty folders in this repository.
+
+## Frontmatter
+
+Every page starts with:
+
+```yaml
+title: Short specific title
+description: One sentence used by search and the page header.
+audience: [user, developer, operator, maintainer]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: path/inside/that/repo
+```
+
+`status` is `verified`, `partial`, or `historical`. Use `partial` when the code exists but the live flag or deployment was not re-checked. Use `historical` for a design that RC.8 no longer routes.
+
+`sourceRefs` are repository name, revision, and path. Use a full Git SHA for an application repository. For `release-manifests`, which is not its own Git repository, `ref` is the release tag. Never write an absolute filesystem path, and do not link to a Git host until a canonical remote is chosen.
+
+`lib/docs-schema.ts` validates this block at build time.
+
+## Navigation
+
+`content/docs/meta.json` orders the sidebar. A line wrapped in `---` is a section label. `...folder` pulls a directory's pages into that section. Each folder has its own `meta.json` for page order.
+
+Search is the local index built from these pages. A new page is searchable after the next production build. There is no hosted search service.
+
+## Release versioning
+
+`content/releases/<version>.json` is the public provenance file. `lib/releases/schema.ts` is the type check. The RC.8 page renders it through `<ReleaseImages />`. Copy image names, tags, SHAs, Dockerfiles, and registry digests. Do not copy cluster secrets, tokens, or live values files.
+
+When a release changes, add a new JSON file and a new page. Do not rewrite an older release page to match the new images.
+
+## Diagrams
+
+Use a `mermaid` fence for architecture. The site renders it in the current theme. Prefer a few named boxes over a diagram of every class. If a diagram fails to render, the page shows the source instead of a broken image.
+
+## Security review before a page is public
+
+Leave out:
+
+- tokens, passwords, cookies, private keys, and connection strings
+- steps that change WAF rules, disable checks, or demonstrate a bypass
+- raw user code, reference solutions, and test-case payloads
+- instructions that only make sense with the operator's kubeconfig
+
+State a limit in one sentence when readers need to know it exists. Point operators at the private runbook for the procedure.
+
+## Documentation status of this site
+
+This repository is D0/D1: the site, the conventions, and five verified pages plus this guide. It does not generate OpenAPI, PDFs, or cross-repository sync.

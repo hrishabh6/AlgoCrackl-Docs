@@ -1,0 +1,59 @@
+---
+title: Platform features and Java support
+description: Which RC.8 features are available, and which languages the release actually executes.
+audience: [user, developer]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/playground/service/PlaygroundRunService.java
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/models/Language.java
+  - repo: AlgoCrack-APIGateway
+    ref: e61d5fd86b116119e59c0536cdc88953d3510cc7
+    path: build.gradle
+---
+
+RC.8 is a Java practice platform with a few surrounding product features. The table below is a support matrix, not a roadmap.
+
+## Product features
+
+| Area | RC.8 status |
+| --- | --- |
+| Accounts | Local registration and Google OAuth, with JWTs issued by Auth Service. |
+| Problem catalogue | Questions, tags, filters that can exclude difficulty or tags, saved problems, and custom lists. |
+| Run and Submit | Judged execution. A problem Run compares your output with expected output, which means the platform executes your solution and a reference solution. |
+| Custom test cases | You can supply cases on a problem Run. They are judged, not printed as raw console output. |
+| Playground | A scratchpad. It stores a snippet and can run it without a problem, an oracle, or a streak. |
+| Problem of the Day | Problem Service can plan one challenge per UTC day and guard that job with a MySQL named lock. An empty schedule is an explicit response, not a random problem. |
+| Profile, rank, and badges | Rank algorithm `rank-v1` scores solved problems, daily-challenge completion, and topic breadth. Quality and contest terms exist in the formula and are zero. Seventeen badge codes are defined. |
+| Focus Mode | The problem workspace can take the screen. This is a desktop session state, not a separate product. |
+| Observability | Services emit structured JSON logs and Prometheus metrics. Prometheus, Grafana, and Loki can be enabled with the Helm chart. |
+
+## Language matrix
+
+| Path | Java | Python | C++ | JavaScript |
+| --- | --- | --- | --- | --- |
+| Problem Run and Submit on the persistent NsJail runner | Verified execution path for RC.8 | Not a verified RC.8 execution path | Named in the submission `Language` enum only | Named in the submission `Language` enum only |
+| Playground save | Yes | Yes | No | No |
+| Playground run | Yes. Non-Java runs are rejected before execution | Rejected with a validation error | No | No |
+| Complexity analysis | Source exists. Not an RC.8 user feature | No | No | No |
+
+Playground still advertises Java and Python in its language catalogue. The run service then refuses anything other than Java. Saving a Python snippet and executing it are different operations.
+
+The backend services are built with a Java 21 toolchain. Older service READMEs that say Java 17 are stale.
+
+## Retained paths that are not the RC.8 route
+
+The Code Execution Engine still contains a Kubernetes Job executor and a local-process executor. RC.8 routes submissions and Java Playground to the persistent NsJail runner. Those older paths are compatibility and rollback code. A Job is not created for a normal Java Run on this release.
+
+Static complexity analysis and a dynamic profiling sandbox are also present in source. Chart defaults leave them off, and this documentation does not treat them as a feature you can rely on.
+
+## Sources
+
+- `AlgoCrack-SubmissionService` `fddf3d52b709b2bacc476898893e651dfadf0fba`, `PlaygroundRunService.java` and `Language.java`
+- `AlgoCrack-APIGateway` `e61d5fd86b116119e59c0536cdc88953d3510cc7`, `build.gradle`
+- `AlgoCrack-SubmissionService` `.../progress/rank/RankCalculator.java` and `BadgeCodes.java` at the same submission SHA

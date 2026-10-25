@@ -1,13 +1,44 @@
 ---
-title: Hello World
-description: Your first document
+title: Introduction to AlgoCrack
+description: What the RC.8 platform is, and what this documentation will not claim.
+audience: [user, developer, operator]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: release-manifests
+    ref: v1.0.0-rc.8
+    path: images.tsv
+  - repo: helm
+    ref: f32b8db734b111e3e3c1acce636e90f068dcd0d9
+    path: algocrack/values.yaml
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+AlgoCrack is a personal LeetCode-style coding platform. You browse problems, write code, run it against tests, and submit a solution. The RC.8 release packages that system as eight published container images and runs it on a local Kubernetes cluster.
 
-## What is Next?
+This site documents that release. It does not describe a public multi-tenant service, and it does not report traffic, user counts, or uptime.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+## What you can do
+
+- Sign in with a local account or Google OAuth.
+- Browse the problem catalogue, tags, saved problems, and custom lists.
+- Run a solution against visible tests, including cases you type, and submit it for judging.
+- Use Playground to run a Java snippet that is not attached to a problem.
+- Follow a scheduled Problem of the Day, a profile, rank, and badges.
+
+Java is the language RC.8 actually executes for both submissions and Playground. The [support matrix](/docs/using/features) separates that from languages that can be named or saved but are not a verified execution path.
+
+## What this release is made of
+
+The browser talks to an ingress. Page routes stay on the Next.js frontend. API routes pass through a ModSecurity edge, then an internal API gateway, then Auth, Problem, and Submission services. MySQL holds application data. Submission Service asks the Code Execution Engine to run code. The engine places work on Redis, and a separate Java runner executes it inside NsJail.
+
+The [architecture overview](/docs/architecture/overview) is the map. The [repository map](/docs/architecture/repositories) says which Git repository produced each image. The [RC.8 release](/docs/releases/v1.0.0-rc.8) lists the verified tags, commits, and digests.
+
+## What is intentionally out of scope
+
+Execution & Security, the API reference, and Deployment & Operations are later documentation milestones. This first slice does not invent those pages. Complexity analysis exists in the source tree and is not an RC.8 user feature. Kubernetes Job execution and a trusted local-process path remain in the code as fallbacks; they are not the route RC.8 uses for Java submissions or Java Playground.
+
+## Sources
+
+- `release-manifests/v1.0.0-rc.8/images.tsv`, release `v1.0.0-rc.8`
+- `helm` `f32b8db734b111e3e3c1acce636e90f068dcd0d9`, `algocrack/values.yaml`

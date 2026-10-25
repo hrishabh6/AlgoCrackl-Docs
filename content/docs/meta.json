@@ -1,0 +1,15 @@
+{
+  "title": "AlgoCrack",
+  "pages": [
+    "---Introduction---",
+    "index",
+    "---Using AlgoCrack---",
+    "...using",
+    "---Architecture---",
+    "...architecture",
+    "---Developer Guide---",
+    "...developer",
+    "---Releases---",
+    "...releases"
+  ]
+}

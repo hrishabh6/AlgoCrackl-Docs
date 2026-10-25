@@ -1,0 +1,53 @@
+---
+title: RC.8 release
+description: Published images, source commits, and limits for AlgoCrack v1.0.0-rc.8.
+audience: [developer, operator, maintainer]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: release-manifests
+    ref: v1.0.0-rc.8
+    path: images.tsv
+  - repo: CodeExecutionEngine
+    ref: c8e9c069e384d56a5ba3a01e370188db88ec05ba
+    path: Dockerfile.runner.packaged
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/playground/service/PlaygroundRunService.java
+---
+
+`v1.0.0-rc.8` is the documentation baseline. Eight `linux/amd64` images are published and recorded as `VERIFIED`. The release runs on a local Kubernetes cluster from those images. It is a personal production-style environment.
+
+Image identity is the tag plus the manifest digest below. A rebuild of the same Git commit produces a different digest, so this page does not treat a commit SHA as a substitute for the published digest.
+
+## Execution contract
+
+| Mode | RC.8 route |
+| --- | --- |
+| Submission Run and Submit | Persistent NsJail runner |
+| Java Playground | Persistent NsJail runner |
+| Python Playground | Snippet save only. Run is rejected. |
+| Complexity profiling | Not a user-facing feature |
+| Kubernetes Job and local process | Still in source. Not the selected route for the two rows above. |
+
+The orchestrator and the runner share Git commit `c8e9c069e384d56a5ba3a01e370188db88ec05ba` and do not share a Dockerfile.
+
+## Published images
+
+<ReleaseImages />
+
+The table shortens digests for reading. The checked-in record at `content/releases/v1.0.0-rc.8.json` has the full OCI index digest for each image. Documentation builds validate that file with a Zod schema. They do not contact a registry or a cluster.
+
+## Limits that travel with this release
+
+- Playground execution is Java-only.
+- Compile output may include a `JAVA_TOOL_OPTIONS` banner. That banner is the runner's JVM flag, not a line of the user's program.
+- The submission language enum names C++ and JavaScript. Naming them is not the same as executing them on this release.
+- Do not read this page as a capacity, traffic, or uptime statement.
+
+## Sources
+
+- `release-manifests/v1.0.0-rc.8/images.tsv`
+- `CodeExecutionEngine` `c8e9c069e384d56a5ba3a01e370188db88ec05ba`
+- `AlgoCrack-SubmissionService` `fddf3d52b709b2bacc476898893e651dfadf0fba`, `PlaygroundRunService.java`
