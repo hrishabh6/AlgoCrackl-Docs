@@ -6,6 +6,12 @@
     "java-run",
     "official-java-submit-and-oracle",
     "playground-java-execution",
-    "playground-snippet-persistence"
+    "playground-snippet-persistence",
+    "problem-of-the-day-lifecycle",
+    "accepted-submissions-streaks-and-progress",
+    "rankings-badges-achievements-and-leaderboards",
+    "saved-questions-and-custom-problem-lists",
+    "profile-and-statistics-retrieval",
+    "cross-service-errors-timeouts-and-recovery"
   ]
 }
