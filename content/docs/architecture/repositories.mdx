@@ -26,6 +26,8 @@ AlgoCrack is not one Git repository. The workspace holds independent repositorie
 
 `helm` (`f32b8db734b1`) is the deployment contract: chart templates, ingress paths, and the runner. `k8s` is an older Kustomize base and is not the RC.8 release contract. `scripts` holds local development, image publish, and validation tooling. It does not ship as one of the eight images.
 
+For public repository URLs and commit-pinned implementation links, use [Source repositories](/docs/architecture/source-repositories). It distinguishes verified public links from the unavailable historical Kustomize remote instead of guessing at link availability.
+
 `release-manifests` and the release notes under `context/releases` are workspace files, not their own Git repositories. The docs site copies the non-secret image rows into `content/releases/v1.0.0-rc.8.json` so a documentation build does not need Kubernetes or Docker Hub.
 
 MySQL and Redis are cluster dependencies, not AlgoCrack image builds. The chart runs them beside the services. Their data is not documentation.

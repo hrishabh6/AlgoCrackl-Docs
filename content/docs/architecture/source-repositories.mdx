@@ -1,0 +1,38 @@
+---
+title: Source repositories
+description: Public, commit-pinned source references for the RC.8 documentation baseline.
+audience: [developer, maintainer, operator]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: CodeExecutionEngine
+    ref: c8e9c069e384d56a5ba3a01e370188db88ec05ba
+    path: Dockerfile.runner.packaged
+---
+
+## Purpose
+
+AlgoCrack is composed from independent repositories. This page is the public source entry point for engineering documentation: it links claims to the exact RC.8 source revision without making the documentation build contact GitHub.
+
+Each public link was checked against the configured repository remote on 2026-10-25. The older Kustomize repository is intentionally shown as unavailable because anonymous GitHub access was not verified; it is historical deployment material, not the current Helm contract.
+
+<SourceRepositoryTable />
+
+## How to use these links
+
+- **View repository** opens the verified public repository home.
+- **View pinned revision** opens the full RC.8 commit, rather than the moving default branch.
+- **Implementation source** links a relevant file or directory at that same commit where one is suitable for architectural orientation.
+
+The table is not a claim that every commit was deployed to a particular running workload. The [RC.8 release](/docs/releases/v1.0.0-rc.8) page records the published image/source manifest; the global architecture pages explain the separate missing revision-19 deployment snapshot.
+
+## Relationship to the architecture
+
+- Start with [System context](/docs/architecture/system-context) and [Container architecture](/docs/architecture/container-architecture) for platform boundaries.
+- Use [Request routing](/docs/architecture/request-routing-and-authentication), [Data ownership](/docs/architecture/data-ownership-and-persistence), and [Execution coordination](/docs/architecture/execution-coordination-and-trust-boundaries) to follow a particular responsibility.
+- Read the [Repository and microservice map](/docs/architecture/repositories) for the shorter image-to-role overview.
+
+## Availability note
+
+Public accessibility is a property of a repository at verification time, not a guarantee that it will remain public. Broken or withdrawn public links should be marked unavailable in the central registry rather than replaced with guessed URLs.
