@@ -1,0 +1,68 @@
+---
+title: Playground
+description: Write, save, reopen, and execute an independent Java snippet with stdin, stdout, and stderr.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/playground/PlaygroundWorkspace.tsx
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/playground/OutputPanel.tsx
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/playground/service/PlaygroundRunService.java
+---
+
+Playground is a signed-in scratchpad for a program that is not attached to a catalogue problem. It is the appropriate place to test Java standard input, standard output, and error output without a problem-specific oracle or progress outcome.
+
+## Create and run a Java snippet
+
+1. Open **Playground** after signing in.
+2. Give the snippet a title and select **Java**.
+3. Write a complete program in the editor. Add input in the **Input (stdin)** panel if the program reads standard input.
+4. Select **Run** or use the displayed keyboard shortcut. The output panel shows stdout and stderr separately in the returned result, and displays the appropriate compile/runtime/timeout state.
+5. Select **Save** to create a snippet. Saved snippets appear in the left library; select one to reopen it, edit it, and save updates. The workspace warns before discarding unsaved edits.
+
+Use **Reset starter** to replace the editor and stdin with the current language’s starter template. It asks before replacing dirty work.
+
+## What a result means
+
+| Result | What to do |
+| --- | --- |
+| Output | Read program stdout and stderr in the output area; successful responses may also show approximate runtime/memory fields. |
+| Compile error | Correct the code based on compiler output. |
+| Runtime error | Check the program path/inputs and the error output. |
+| Time limit exceeded | Stop unbounded loops or reduce work. The Playground run limit is five seconds in this release. |
+| Truncated output | The UI marks output truncated at 64 KiB; reduce printed output to inspect the important part. |
+
+## Java execution versus saved language choices
+
+The language catalogue can present Java and Python for saved snippets. RC.8 execution is intentionally narrower:
+
+- **Java**: saved snippets can run through the release-qualified Playground execution path.
+- **Python**: a snippet can be saved, reopened, and edited, but a run request is rejected before a sandbox process starts.
+- **Other languages**: not a supported Playground save/run option in the current catalogue.
+
+Choose Java whenever you need to execute. A saved Python selection is not evidence that Python execution is available.
+
+## How Playground differs from a problem
+
+- It does not use a problem statement, visible cases, hidden cases, or a trusted oracle.
+- A successful run does not mark a problem solved, create an accepted submission, update a streak, or award rank/badge progress.
+- It is for a complete program and raw stdin/stdout/stderr behavior, not a solution method bound to a question template.
+
+## Limits and recovery
+
+- Playground availability depends on the frontend runtime visibility flag and independently controlled backend API/run flags. A visible nav item does not override a disabled backend.
+- If the page cannot load languages or saved snippets, it reports that Playground is unavailable. Preserve unsaved code locally and try again after sign-in/availability is restored.
+- This documentation does not describe Playground as a hostile-code sandbox guarantee. It reports the RC.8 Java feature boundary only.
+
+Next: [Run versus Submit](/docs/using/run-and-submit) for judged problem solutions, or [Troubleshooting and limitations](/docs/using/troubleshooting) for access and execution errors.
+
+## RC.8 qualification
+
+The Java-only execution boundary, five-second run timeout, snippets, stdin, stdout/stderr result handling, and output-truncation presentation are verified from the RC.8 frontend and Submission Service. They remain distinct from the independent feature flags that control availability in a given environment.

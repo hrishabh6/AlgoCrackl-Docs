@@ -1,0 +1,57 @@
+---
+title: Profiles, rankings, and achievements
+description: Read your progress, activity, badges, rank tier, and the authenticated leaderboard.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/profile/ProfilePage.tsx
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/app/leaderboard/page.tsx
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/progress/rank/RankCalculator.java
+---
+
+Your profile is the signed-in view of activity and solved-problem progress. The Leaderboard is also authenticated and presents the global all-time AlgoCrack score for the available ranked users.
+
+## Profile
+
+Open **Profile** after signing in to view:
+
+- account details and optional profile information;
+- current rank tier, score, and leaderboard position when the progress service responds;
+- solved count, completion percentage, language activity, and solved-by-difficulty summary;
+- current/longest Daily Challenge streak and POTD completion count;
+- a contribution/activity heatmap and recent submissions;
+- earned badges and the language distribution of accepted solutions.
+
+Some profile sections are loaded independently. If progress/badge data is temporarily unavailable, the profile can still show account and question statistics while those enhanced sections remain absent. The UI reports **Profile is not available yet** for a corresponding not-found response.
+
+## Leaderboard
+
+Open **Leaderboard** after signing in. It lists position, user, tier, score, unique solved total, and POTD total. The page is paginated at 25 entries per view and marks the current user when present.
+
+Use **Previous** and **Next** to move through available pages. An empty leaderboard means no ranked users were returned; it is not an invitation to infer a global user count from this documentation.
+
+## Rank and badges
+
+RC.8 uses rank algorithm `rank-v1`. Its documented inputs include solved work, Daily Challenge completion, and topic breadth; quality and contest terms exist in the formula but have a zero value in this release. Badge definitions are evaluated from progress events and active badge definitions.
+
+This page intentionally avoids promising a specific score for a future solve: rank and badge results depend on the current verified algorithm/data, and inactive or unavailable definitions are not shown as awards.
+
+## Limits and recovery
+
+- Profile and leaderboard require a signed-in user.
+- A successful Run is not the same as an accepted submission and does not establish solved/rank progress.
+- The UI shows a recoverable error if a profile/leaderboard request fails. Refresh after reconnecting or sign in again if the session expired.
+
+Next: [Daily Challenge and streaks](/docs/using/daily-challenge-and-streaks) or [Troubleshooting and limitations](/docs/using/troubleshooting).
+
+## RC.8 qualification
+
+Profile sections and the 25-entry leaderboard page are verified from the RC.8 frontend. `rank-v1` and badge behavior are release-qualified backend facts, not a competition or public-service guarantee.

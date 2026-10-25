@@ -7,9 +7,24 @@ const entries = [
     text: 'What the RC.8 platform is, and the claims this site will not make.',
   },
   {
-    href: '/docs/using/features',
-    title: 'Features and Java support',
-    text: 'Which product paths execute Java, and which languages are only retained in source.',
+    href: '/docs/using/getting-started',
+    title: 'Get started',
+    text: 'Sign in, choose a problem, run Java code, and submit for an official verdict.',
+  },
+  {
+    href: '/docs/using/problem-discovery',
+    title: 'Solve problems',
+    text: 'Search the catalogue, use filters, and organize work in Saved and custom lists.',
+  },
+  {
+    href: '/docs/using/run-and-submit',
+    title: 'Run and Submit',
+    text: 'Understand the difference between workspace iteration and official judging.',
+  },
+  {
+    href: '/docs/using/playground',
+    title: 'Java Playground',
+    text: 'Use stdin, stdout, stderr, and saved snippets outside a formal problem.',
   },
   {
     href: '/docs/architecture/overview',

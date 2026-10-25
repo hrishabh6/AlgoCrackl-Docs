@@ -1,4 +1,15 @@
 {
   "title": "Using AlgoCrack",
-  "pages": ["features"]
+  "pages": [
+    "getting-started",
+    "problem-discovery",
+    "editor-and-focus",
+    "run-and-submit",
+    "playground",
+    "daily-challenge-and-streaks",
+    "profiles-rankings-and-achievements",
+    "troubleshooting",
+    "features",
+    "screenshot-capture-checklist"
+  ]
 }

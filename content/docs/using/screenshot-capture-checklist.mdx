@@ -1,0 +1,43 @@
+---
+title: Screenshot capture checklist
+description: A review checklist for future product screenshots without fabricating UI evidence.
+audience: [maintainer]
+status: partial
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/app
+  - repo: release-manifests
+    ref: v1.0.0-rc.8
+    path: images.tsv
+---
+
+No screenshots are embedded in the D2 pages. Capture them only from an approved RC.8-equivalent environment with synthetic/demo data and review them for account data, tokens, editor contents, and test input before publication.
+
+## Required capture states
+
+| Page | Exact state to capture | Information that must be visible | Review notes |
+| --- | --- | --- | --- |
+| Getting started | Signed-in Problems catalogue | Top navigation, an ordinary problem row, Java-capable journey entry point | Use a synthetic account and non-sensitive title. |
+| Problem discovery | Filtered listing | Search, a tag filter, difficulty/status chips, sort control, and URL-backed state | Do not show a real user’s saved list or private profile. |
+| Editor | Desktop problem workspace | Description, Java selector, editor, visible test case, Run/Submit actions | Use non-sensitive starter/example code only. |
+| Run result | Completed Run | Result panel with a benign verdict and per-case presentation | Do not capture hidden case data or reference source. |
+| Submit result | Completed official submission | Terminal verdict and history link/state | Use a known demo submission; do not imply a latency target. |
+| Playground | Saved Java snippet | Snippet title, stdin panel, output/stderr panel, save/run controls | Avoid source that resembles an attack payload or embeds credentials. |
+| Daily Challenge | Scheduled and empty states | UTC day label/reset text and, separately, no-challenge message | Capture two states; do not alter scheduling solely for screenshots. |
+| Profile and leaderboard | Synthetic signed-in data | Progress cards, a badge, and paginated leaderboard layout | Remove names/emails and any non-demo activity data. |
+
+## Capture procedure
+
+1. Record the release tag, frontend source SHA, browser, viewport, locale, and capture date in the pull request or asset metadata.
+2. Use the exact UI state in the table; do not compose a screenshot from multiple sessions.
+3. Capture desktop and narrow mobile layouts for the editor, Playground, and diagram expansion dialog.
+4. Check light and dark themes where the screenshot is intended to show visual behavior.
+5. Redact or recapture rather than blur secrets, personal data, raw test cases, tokens, or browser extension chrome.
+6. Store a reviewed, optimized asset under the docs repository’s public image policy only after approval; add alt text that describes the task outcome rather than decorative pixels.
+
+## Qualification
+
+This is a capture plan, not visual proof that all listed states were captured during D2. It keeps future evidence tied to a known release rather than manufacturing screenshots from source code.

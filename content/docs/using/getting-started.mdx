@@ -1,0 +1,63 @@
+---
+title: Getting started
+description: Sign in, find a problem, run a first Java solution, and submit it for judging.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/problems/problem-actions.tsx
+  - repo: AlgoCrack-AuthService
+    ref: ba9f759dec60307b3ebb376644df3282940401b2
+    path: src/main/java/com/hrishabh/algocrackauthservice/controller/AuthController.java
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/controller/SubmissionController.java
+---
+
+AlgoCrack is a coding-practice workspace: find a problem, write a solution, test it, then submit it for the official verdict. This guide is for the RC.8 experience and assumes a Java solution.
+
+## Before you begin
+
+- Create a local account or sign in with the Google sign-in option configured by the deployment.
+- Use a current desktop or mobile browser. The workspace rearranges on narrower screens.
+- Sign in before running or submitting a problem. Reading the public catalogue does not require the same signed-in state.
+
+RC.8 verifies Java execution for problem Run and Submit. The language selector may expose names retained by the application, but [Java support](/docs/using/features) is the release-qualified support matrix.
+
+## Complete your first problem
+
+1. Open **Problems** in the top navigation.
+2. Search by title, choose a difficulty or topic, and open a result. See [Problem discovery](/docs/using/problem-discovery) for how filters combine.
+3. Read the description and visible test cases. In the **Code** panel, select **Java** and replace the starter code with your solution.
+4. Optionally edit an existing visible case or add a case in the test-case panel. Inputs are entered as the JSON shape requested by that problem.
+5. Select **Run**. The result panel reports a judged result for the cases currently in the workspace.
+6. When the result is correct, select **Submit**. The app acknowledges the request and waits for the final submission record.
+7. Read the verdict, test summary, runtime, memory value when reported, and any compiler or error message in the result panel. Your history is also available from the problem and **Submissions** views.
+
+## Expected outcomes
+
+- **Run** returns a result for visible and user-edited cases. It is useful for iteration, but it is not the official record of solving a question.
+- **Submit** judges against the problem's official evaluation path. An **Accepted** outcome can refresh saved/solved state and, when applicable, daily-challenge progress.
+- A compile error, runtime error, timeout, or wrong answer is a result to inspect—not an indication that the editor lost your code.
+
+## Navigation at a glance
+
+- **Problems**: catalogue, filters, saved questions, and custom lists.
+- **Playground**: a separate signed-in scratchpad for Java snippets; it does not attach a solution to a problem.
+- **Submissions**: submission history across problems.
+- **Leaderboard** and **Profile**: authenticated views of rank, progress, activity, and badges.
+
+## Limits and recovery
+
+- The active release does not promise that every language shown in historical or saved data is executable. Select Java for the verified flow.
+- A Submit can take longer than a Run because it is asynchronous and includes official evaluation. If the result is not available after the in-page wait, check your submission history rather than submitting duplicates immediately.
+- If sign-in fails or a page says a feature is unavailable, use the focused guidance in [Troubleshooting and limitations](/docs/using/troubleshooting).
+
+Next: [find a problem](/docs/using/problem-discovery), [understand Run versus Submit](/docs/using/run-and-submit), or [use the Java Playground](/docs/using/playground).
+
+## RC.8 qualification
+
+This workflow is verified from the RC.8 frontend integration, Submission Service contracts, and release validation. It describes the user flow, not a latency or availability guarantee.

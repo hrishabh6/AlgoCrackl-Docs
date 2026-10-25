@@ -1,0 +1,51 @@
+---
+title: Daily Challenge and streaks
+description: Find the scheduled Problem of the Day and understand which accepted solutions count toward a streak.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/daily-challenge/DailyChallengeCard.tsx
+  - repo: AlgoCrack-ProblemService
+    ref: 0bd8c3e0bb6850d4635db4bbea8bdf15bbc980d3
+    path: src/main/java/com/hrishabh/problemservice/dailychallenge/service/PotdStreakCalculator.java
+  - repo: AlgoCrack-SubmissionService
+    ref: fddf3d52b709b2bacc476898893e651dfadf0fba
+    path: src/main/java/com/hrishabh/algocracksubmissionservice/dto/PotdSubmissionOutcomeDto.java
+---
+
+The Daily Challenge is the Problem of the Day (POTD) scheduled for a UTC challenge day. It is a normal problem workspace with additional progress context—not a different editor or an automatic daily submission.
+
+## Participate
+
+1. Find the **Daily Challenge** card in the product surface that presents it.
+2. Open **Solve today’s challenge** to enter that problem’s workspace.
+3. Submit an accepted Java solution through the normal official Submit workflow.
+4. When the returned submission identifies a newly completed daily challenge, the workspace shows a completion dialog with the current streak.
+
+The card shows the challenge date and a client-side display of the next reset time. The product labels the challenge day as UTC.
+
+## What counts toward a streak
+
+An accepted submission must match the scheduled Daily Challenge on its challenge date to count. Running code, saving it in Playground, or accepting another question does not satisfy that Daily Challenge completion rule.
+
+The profile can show current streak, longest streak, total POTD completions, and a reminder whether today’s challenge is already solved. These are progress views; a zero, missing, or still-loading value should not be read as a promise that scheduling itself failed.
+
+## Scheduling boundaries
+
+The UI can explicitly show **No challenge is scheduled for today yet. Check back soon.** That is a supported visible state, not a request to choose a random replacement question. The documentation does not promise a challenge for every day or a particular curation schedule.
+
+## Limits and recovery
+
+- The streak is based on accepted official submissions, not a Run result.
+- Date boundaries are UTC for the challenge, even if your browser displays a localized reset countdown.
+- If daily progress does not refresh after a result, revisit the profile or submission after the submission reaches its terminal state; do not assume a separate schedule was created by the client.
+
+Next: [Run versus Submit](/docs/using/run-and-submit) or [Profiles, rankings, and achievements](/docs/using/profiles-rankings-and-achievements).
+
+## RC.8 qualification
+
+The empty-state copy, UTC challenge label, completion dialog, and streak rule are verified from the RC.8 frontend and daily-challenge/progress sources. The planner’s operator scheduling procedure is intentionally outside this user guide.

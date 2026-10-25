@@ -1,0 +1,67 @@
+---
+title: Troubleshooting and limitations
+description: Resolve common sign-in, catalogue, editor, judging, Playground, and progress issues without changing platform controls.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/lib/error-utils.ts
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/playground/PlaygroundWorkspace.tsx
+  - repo: release-manifests
+    ref: v1.0.0-rc.8
+    path: images.tsv
+---
+
+Start with the message in the page or result panel. Preserve your source code before refreshing a browser tab, especially for an unsaved Playground snippet.
+
+## Sign-in and access
+
+| Symptom | What to try |
+| --- | --- |
+| Sign-in returns you to the app but an authenticated page is still unavailable | Refresh the page once and sign in again. Authenticated features such as Run, Submit, Profile, Leaderboard, and Playground require a valid session. |
+| Google sign-in reports an invalid redirect/request | The deployment’s OAuth callback configuration needs operator correction. Do not repeatedly retry with changed browser URLs; use local sign-in if it is available or contact the deployment owner. |
+| Run/Submit controls are missing | Open the problem while signed in. The UI does not expose those actions to a signed-out user. |
+
+## Catalogue and workspace
+
+| Symptom | What to try |
+| --- | --- |
+| Problems do not load | Use the page’s retry control and check your connection. A failed tag-count request and a failed question request are separate conditions. |
+| No problems match filters | Use **Clear filters** or remove individual filter chips. Remember that “is not” excludes the selected difficulty, tags, or solve status. |
+| Solved/unsolved filter is unavailable | Sign in; that filter uses your account-specific question view. |
+| A result panel is blank | Run or submit code first, then open the Test Result tab. |
+
+## Java execution results
+
+| Outcome | Meaning and next step |
+| --- | --- |
+| Compilation error | Review the supplied compiler output, correct the Java source, then Run again. |
+| Runtime error | Check the code and the selected test input for invalid assumptions. |
+| Time limit exceeded | Look for a non-terminating loop or reduce the algorithm’s work. |
+| Wrong answer / failed run | Compare against the problem contract and test data. A Run is judged against a trusted expected result, not a console echo. |
+| Submit still appears pending | Avoid immediate duplicate submissions. Check the problem’s submission history after the in-page polling window; a terminal record can arrive after that UI wait. |
+
+## Playground
+
+- A hidden Playground navigation item is a frontend availability setting; a visible page still requires the independently enabled backend API and run paths.
+- Run Java for the supported RC.8 Playground execution flow. Python snippets may be saved but a Python run is rejected before execution.
+- Keep stdin in the Input panel and inspect stdout/stderr in the Output panel. Reduce program output when the UI reports truncation.
+- Save a snippet before navigating away if you need it later. The workspace prompts before discarding local unsaved changes, but that prompt cannot protect against every browser or device failure.
+
+## Known product limits
+
+- RC.8 documents Java as the verified problem and Playground execution language. It does not claim Python, C++, or JavaScript problem execution.
+- Playground success does not create a solved problem, submission history entry, streak, or rank/badge progress.
+- Daily Challenge scheduling can be empty for a UTC day; the UI has an explicit no-challenge state.
+- This documentation is a release-qualified guide, not an SLA, security support channel, or operator runbook.
+
+For a supported workflow, return to [Getting started](/docs/using/getting-started), [Run versus Submit](/docs/using/run-and-submit), or [Playground](/docs/using/playground).
+
+## RC.8 qualification
+
+The error/presentation guidance reflects the RC.8 frontend and release evidence. It intentionally excludes operational controls, deployment credentials, and sandbox implementation commands.

@@ -1,0 +1,54 @@
+---
+title: Code editor and Focus Mode
+description: Use the problem workspace, test cases, result panels, and desktop-focused reading controls.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/editor/EditorLayout.tsx
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/editor/TestCasesPanel.tsx
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/focus-mode/FocusModeToggle.tsx
+---
+
+The problem workspace keeps the description, code editor, and test/result panel together. It is designed for reading a question and iterating on a solution without leaving the problem.
+
+## Workspace layout
+
+On a desktop-sized screen, the description and code column sit side by side. The code column stacks the editor above the test/result panel. Drag the visible panel handles to resize the panes; the panels can also be collapsed or maximized with their controls. On a narrow screen, the same content stacks vertically.
+
+The editor toolbar includes language selection and a format action. Choose **Java** for the RC.8 verified execution path. Code is associated with the current problem and signed-in context; changing problem or user context resets the workspace state for that view.
+
+## Test cases and results
+
+1. Use the **Testcase** tab to inspect the published visible cases.
+2. Modify an existing case or choose **Add case** to enter a JSON input matching the parameter names described by the problem.
+3. Use **Reset** on a modified visible case when you want its original input again. User-added cases are marked as custom.
+4. Select **Run** from the problem actions. The panel switches to **Test Result** when a verdict arrives.
+5. Inspect the per-case outcome, overall verdict, compiler output or error message, and runtime/memory fields when the response provides them.
+
+Custom cases are included in the Run request. They are judged by the problem flow; they are not a raw standard-input console. Use [Playground](/docs/using/playground) when the goal is a standalone Java program with stdin/stdout/stderr.
+
+## Focus Mode and fullscreen
+
+Focus Mode is a desktop workspace state that reduces surrounding application chrome while you work. It is not a separate problem type and does not change judging. The workspace also provides browser fullscreen and panel-maximize controls where supported by the browser.
+
+Exit the mode with the corresponding visible control or your browser's fullscreen exit action. Returning to the ordinary workspace restores the normal application navigation.
+
+## Limitations
+
+- The layout controls change presentation, not the persisted problem or submission record.
+- Do not assume that code formatting proves code compiles; formatting is an editor action, while compilation occurs during Run or Submit.
+- The documentation does not claim offline editing, collaborative editing, or an arbitrary terminal—those are not RC.8 product guarantees.
+
+Next: [Run versus Submit](/docs/using/run-and-submit) or [Troubleshooting and limitations](/docs/using/troubleshooting).
+
+## RC.8 qualification
+
+This page is verified from the RC.8 editor, focus-mode, and result-panel components. Exact pane sizes and individual browser fullscreen behavior are usability details and may vary by viewport/browser.

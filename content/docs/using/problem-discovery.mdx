@@ -1,0 +1,65 @@
+---
+title: Problem discovery
+description: Search, combine catalogue filters, and organize questions with Saved and custom lists.
+audience: [user]
+status: verified
+release: v1.0.0-rc.8
+lastVerified: 2026-10-25
+sourceRefs:
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/components/problems/use-problem-filters.ts
+  - repo: frontend
+    ref: c859bc68bd6d9f0f4a8c08507ed259b871ee2fb0
+    path: src/lib/api/problem-service.ts
+  - repo: AlgoCrack-ProblemService
+    ref: 0bd8c3e0bb6850d4635db4bbea8bdf15bbc980d3
+    path: src/main/java/com/hrishabh/problemservice/controllers/ProblemListController.java
+---
+
+The Problems page is a pageable library, not a fixed curriculum. Its filter state is stored in the page URL, so a refresh, browser back/forward action, or shared URL preserves the current catalogue query.
+
+## Browse and search
+
+1. Open **Problems** and use the search field to narrow by the entered text. The UI waits briefly after typing before replacing the URL query, which avoids a request for every keystroke.
+2. Use topic chips or the filter panel to choose one or more tags.
+3. Select a difficulty and, after signing in, an optional solved/unsolved status.
+4. Use the sort control for **Number**, **Title**, or **Difficulty**, then choose ascending or descending order.
+5. Select a result to open its problem workspace. The random control chooses from the currently loaded result page, not from every matching result in the catalogue.
+
+Each non-page filter change returns the listing to its first page. The current page is also encoded in the URL.
+
+## Filter semantics
+
+| Filter | Actual RC.8 behavior |
+| --- | --- |
+| Search | Sends the entered search text with the catalogue request. |
+| Difficulty | Can include one difficulty or exclude that one difficulty. |
+| Tags | Selecting several tags passes them together. The filter can include the selected tags or exclude the selected tags. |
+| Status | **Solved** or **Unsolved** is available only to a signed-in user because it uses the authenticated “my questions” route. Its “is not” control reverses the selected status. |
+| Sort | Number, title, or difficulty; ascending is the default. |
+
+Active filters appear as removable chips. **Reset** clears search, difficulty, tags, and status while retaining the current sort choice. An empty filtered result offers a clear-filters action.
+
+## Save and organize questions
+
+The signed-in library has a **Saved** collection and custom problem lists. Use the list controls available from a problem or library view to keep questions for later and to group them into your own lists. Saved/list membership is account-specific; it is not a public annotation on the problem.
+
+The page also shows solved progress for a signed-in user when the account library and progress data are available. A temporary library/progress load failure should not change the catalogue itself; retry when the interface offers it.
+
+## Examples
+
+- To avoid hard graph questions, set difficulty to **Hard** and choose **is not**. Then add **Graph** under tags with **is** to find non-hard graph questions.
+- To revisit unfinished work, sign in, set status to **Unsolved**, then save the resulting problem links in a custom list.
+
+## Limits and recovery
+
+- Status filtering is unavailable while signed out; sign in before expecting solved/unsolved results.
+- The client obtains a tag count list separately from the questions. If it cannot load, the question list can still be retried independently.
+- A URL represents the filter query, not a frozen result snapshot. Published catalogue data can change between visits.
+
+Next: [work in the editor](/docs/using/editor-and-focus) or [Run versus Submit](/docs/using/run-and-submit).
+
+## RC.8 qualification
+
+Filter serialization and request mapping are verified from the RC.8 frontend. Saved and custom lists are documented as user-facing account organization features; this page intentionally does not prescribe internal list-management API calls.
